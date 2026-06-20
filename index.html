@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moss FK kampdashboard</title>
+    <meta name="description" content="Prestasjonsdata, praktisk kampinformasjon og taktiske kodevolum for Moss FK." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="password-gate" id="passwordGate">
+      <form class="password-card" id="passwordForm">
+        <img src="./moss-fk.png" alt="Moss FK" class="password-logo" />
+        <div>
+          <span>Moss FK</span>
+          <h1>Kampdashboard</h1>
+          <p>Skriv inn passord for tilgang.</p>
+        </div>
+        <label>
+          <span>Passord</span>
+          <input id="dashboardPassword" type="password" autocomplete="current-password" autofocus />
+        </label>
+        <p class="password-error" id="passwordError" hidden>Feil passord.</p>
+        <button type="submit">Åpne dashboard</button>
+      </form>
+    </main>
+
+    <main class="app-shell" id="dashboardShell" hidden>
+      <header class="topbar">
+        <div class="brand">
+          <img src="./moss-fk.png" alt="Moss FK" />
+          <div>
+            <p>Moss FK</p>
+            <h1>Kampdashboard 2026</h1>
+            <span id="dateRange">Wyscout, Sportscode og praktisk kampinformasjon samlet i én prestasjonsflate.</span>
+          </div>
+        </div>
+
+        <div class="filters">
+          <div class="segmented" data-filter-group="venue">
+            <span>Bane</span>
+            <div>
+              <button type="button" data-value="Alle" class="is-active">Alle</button>
+              <button type="button" data-value="Hjemme">Hjemme</button>
+              <button type="button" data-value="Borte">Borte</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="kpi-grid" id="kpis"></section>
+
+      <section class="zone-kpi-grid" id="sportscodeKpis"></section>
+
+      <section class="dashboard-grid trend-grid">
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Trend</p>
+              <h2>xG-utvikling</h2>
+            </div>
+            <span id="trendCount"></span>
+          </div>
+          <div id="trendChart"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Praktisk</p>
+              <h2>Datagrunnlag</h2>
+            </div>
+            <span id="practicalCount"></span>
+          </div>
+          <div class="practical-list" id="practicalInfo"></div>
+        </article>
+      </section>
+
+      <section class="dashboard-grid match-grid">
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Kamper</p>
+              <h2>Kamp for kamp</h2>
+            </div>
+            <span id="matchCount"></span>
+          </div>
+          <div class="match-table" id="matchTable"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Koder</p>
+              <h2>Taktisk volum</h2>
+            </div>
+            <span id="codeMax"></span>
+          </div>
+          <div class="opponent-strip" id="opponentStrip" aria-label="Motstandere per kamp"></div>
+          <div class="code-bars" id="codeBars"></div>
+        </article>
+      </section>
+
+      <section class="dashboard-grid player-grid">
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Spillere</p>
+              <h2>Poeng på banen</h2>
+            </div>
+            <span id="playerCount"></span>
+          </div>
+          <div class="player-controls">
+            <label class="input-wrap">
+              <span>Søk</span>
+              <input id="playerSearch" type="search" placeholder="Spiller eller nummer" />
+            </label>
+            <div class="segmented" data-filter-group="minutes">
+              <span>Minutter</span>
+              <div>
+                <button type="button" data-value="0">Alle</button>
+                <button type="button" data-value="180" class="is-active">180+</button>
+                <button type="button" data-value="450">450+</button>
+              </div>
+            </div>
+            <div class="segmented" data-filter-group="appearances">
+              <span>Kamper</span>
+              <div>
+                <button type="button" data-value="0" class="is-active">Alle</button>
+                <button type="button" data-value="5">5+</button>
+                <button type="button" data-value="10">10+</button>
+              </div>
+            </div>
+            <div class="segmented" data-filter-group="playerPoints">
+              <span>Poeng</span>
+              <div>
+                <button type="button" data-value="0" class="is-active">Alle</button>
+                <button type="button" data-value="10">10+</button>
+                <button type="button" data-value="15">15+</button>
+              </div>
+            </div>
+            <div class="segmented" data-filter-group="goalDiff">
+              <span>Målforskjell</span>
+              <div>
+                <button type="button" data-value="Alle" class="is-active">Alle</button>
+                <button type="button" data-value="Pluss">Pluss</button>
+                <button type="button" data-value="Null">Null</button>
+                <button type="button" data-value="Minus">Minus</button>
+              </div>
+            </div>
+          </div>
+          <div class="player-table" id="playerTable"></div>
+        </article>
+
+        <div class="side-stack">
+          <article class="panel goal-timing-card">
+            <div class="section-title">
+              <div>
+                <p>Mål</p>
+                <h2>Måltiming</h2>
+              </div>
+              <span id="goalTimingCount"></span>
+            </div>
+            <div class="timing-summary" id="goalTimingSummary"></div>
+            <div class="timing-bars" id="goalTimingBars" aria-label="Måltiming for og mot"></div>
+            <div class="timing-legend">
+              <span><i class="timing-for"></i>For</span>
+              <span><i class="timing-against"></i>Mot</span>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="section-title">
+              <div>
+                <p>Bidrag</p>
+                <h2>Mål, assist og kort</h2>
+              </div>
+              <span id="contributionCount"></span>
+            </div>
+            <div class="contribution-table" id="contributionTable"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
