@@ -1825,24 +1825,32 @@
     const compared = state.comparedIndividualPlayers
       .map((playerName) => data.individualPlayers.find((player) => player.player === playerName))
       .filter(Boolean);
-    const selectedIsCompared = state.comparedIndividualPlayers.includes(selected.player);
     const latestMatch = selected.matches.at(-1);
     const metrics = individualMetrics(selected, state.individualTab);
 
     element("individualPlayerCount").textContent = players.length;
     element("individualPlayerList").innerHTML = players
-      .map(
-        (player) => `
-          <button type="button" class="individual-player-button ${selected.player === player.player ? "is-active" : ""}" data-individual-player="${escapeHtml(player.player)}">
+      .map((player) => {
+        const isSelected = selected.player === player.player;
+        const isCompared = state.comparedIndividualPlayers.includes(player.player);
+
+        return `
+          <button
+            type="button"
+            class="individual-player-button ${isSelected ? "is-active" : ""} ${isCompared ? "is-compared" : ""}"
+            data-individual-player="${escapeHtml(player.player)}"
+            aria-pressed="${isCompared ? "true" : "false"}"
+            aria-label="${escapeHtml(player.player)} ${isCompared ? "fjern fra sammenligning" : "legg til sammenligning"}"
+          >
             ${playerPortrait(player)}
             <span>
               <strong>${escapeHtml(player.player)}</strong>
               <small>${player.minutes} min · ${integer(player.scEvents)} SC</small>
             </span>
-            <i class="compare-dot ${state.comparedIndividualPlayers.includes(player.player) ? "is-active" : ""}"></i>
+            <i class="compare-dot ${isCompared ? "is-active" : ""}"></i>
           </button>
-        `,
-      )
+        `;
+      })
       .join("");
 
     element("individualDetail").innerHTML = `
@@ -1861,9 +1869,6 @@
             <div><span>xG</span><strong>${number(selected.xg, 2)}</strong></div>
             <div><span>SC</span><strong>${integer(selected.scEvents)}</strong></div>
           </div>
-          <button type="button" class="compare-toggle ${selectedIsCompared ? "is-active" : ""}" data-compare-player="${escapeHtml(selected.player)}">
-            ${selectedIsCompared ? "Fjern fra sammenligning" : "Legg til sammenligning"}
-          </button>
         </div>
       </div>
       <div class="individual-tabs" aria-label="Spillerdatavalg">
@@ -2088,24 +2093,18 @@
     element("individualPlayerList").addEventListener("click", (event) => {
       const button = event.target.closest("[data-individual-player]");
       if (!button) return;
-      state.selectedIndividualPlayer = button.dataset.individualPlayer;
+      const player = button.dataset.individualPlayer;
+      state.selectedIndividualPlayer = player;
+      if (state.comparedIndividualPlayers.includes(player)) {
+        state.comparedIndividualPlayers = state.comparedIndividualPlayers.filter((item) => item !== player);
+      } else {
+        const nextPlayers = [...state.comparedIndividualPlayers, player];
+        state.comparedIndividualPlayers = nextPlayers.length > 4 ? nextPlayers.slice(1) : nextPlayers;
+      }
       renderIndividualPlayers();
     });
 
     element("individualDetail").addEventListener("click", (event) => {
-      const compareButton = event.target.closest("[data-compare-player]");
-      if (compareButton) {
-        const player = compareButton.dataset.comparePlayer;
-        if (state.comparedIndividualPlayers.includes(player)) {
-          state.comparedIndividualPlayers = state.comparedIndividualPlayers.filter((item) => item !== player);
-        } else {
-          const nextPlayers = [...state.comparedIndividualPlayers, player];
-          state.comparedIndividualPlayers = nextPlayers.length > 4 ? nextPlayers.slice(1) : nextPlayers;
-        }
-        renderIndividualPlayers();
-        return;
-      }
-
       const tabButton = event.target.closest("[data-individual-tab]");
       if (tabButton) {
         state.individualTab = tabButton.dataset.individualTab;
