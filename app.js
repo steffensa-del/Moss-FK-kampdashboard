@@ -1260,16 +1260,8 @@
   const renderCodes = () => {
     const maxCodeTotal = Math.max(...data.codeMatrix.map((row) => row.total));
     element("codeMax").textContent = integer(maxCodeTotal);
-    element("opponentStrip").innerHTML = data.matches
-      .map(
-        (match) => `
-          <div class="opponent-chip" title="#${match.matchNo} ${escapeHtml(match.opponent)}">
-            <img src="./${escapeHtml(match.opponentLogo)}" alt="${escapeHtml(match.opponent)}" />
-            <span>#${match.matchNo}</span>
-          </div>
-        `,
-      )
-      .join("");
+    element("opponentStrip").hidden = true;
+    element("opponentStrip").innerHTML = "";
     element("codeBars").innerHTML = data.codeMatrix
       .map((row) => {
         const width = `${Math.max(5, (row.total / maxCodeTotal) * 100)}%`;
@@ -1277,7 +1269,22 @@
         const cells = row.values
           .map((value, index) => {
             const alpha = localMax ? 0.18 + (value / localMax) * 0.72 : 0.12;
-            return `<span style="background-color:rgba(214, 173, 69, ${alpha})" title="Kamp ${index + 1}: ${value}">${value}</span>`;
+            const match = data.matches[index];
+
+            return `
+              <span
+                class="code-cell"
+                style="background-color:rgba(214, 173, 69, ${alpha})"
+                title="#${match?.matchNo ?? index + 1} ${escapeHtml(match?.opponent ?? "")}: ${value}"
+              >
+                ${
+                  match?.opponentLogo
+                    ? `<img src="./${escapeHtml(match.opponentLogo)}" alt="" aria-hidden="true" />`
+                    : ""
+                }
+                <b>${integer(value)}</b>
+              </span>
+            `;
           })
           .join("");
 
