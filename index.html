@@ -61,6 +61,12 @@
             </div>
             <span id="trendCount"></span>
           </div>
+          <div class="definition-strip is-compact">
+            <div class="definition-chip" title="xG: Forventede mål. Måler sjansekvalitet ut fra hvor sannsynlig et skudd normalt blir mål.">
+              <strong>xG</strong>
+              <span>Forventede mål. Måler sjansekvalitet ut fra hvor sannsynlig et skudd normalt blir mål.</span>
+            </div>
+          </div>
           <div id="trendChart"></div>
         </article>
 
@@ -101,6 +107,39 @@
         </article>
       </section>
 
+      <section class="panel gps-panel" id="gpsMatchModule">
+        <div class="section-title">
+          <div>
+            <p>Fysisk</p>
+            <h2>GPS kampdata</h2>
+          </div>
+          <span id="gpsMatchCount"></span>
+        </div>
+        <div class="gps-note" id="gpsSource"></div>
+        <div class="gps-summary-grid" id="gpsSummary"></div>
+        <div class="gps-match-selector" id="gpsMatchSelector" aria-label="Velg GPS-kamp"></div>
+        <div class="gps-table" id="gpsTable"></div>
+      </section>
+
+      <section class="individual-module">
+        <article class="panel individual-list-panel">
+          <div class="section-title">
+            <div>
+              <p>Individuelt</p>
+              <h2>Spillere</h2>
+            </div>
+            <span id="individualPlayerCount"></span>
+          </div>
+          <label class="input-wrap individual-search">
+            <span>Søk</span>
+            <input id="individualSearch" type="search" placeholder="Spiller eller nummer" />
+          </label>
+          <div class="individual-player-list" id="individualPlayerList"></div>
+        </article>
+
+        <article class="panel individual-detail-panel" id="individualDetail"></article>
+      </section>
+
       <section class="dashboard-grid player-grid">
         <article class="panel">
           <div class="section-title">
@@ -109,6 +148,32 @@
               <h2>Poeng på banen</h2>
             </div>
             <span id="playerCount"></span>
+          </div>
+          <div class="definition-strip">
+            <div class="definition-chip" title="Kamper: Antall kamper spilleren har vært på banen.">
+              <strong>Kamper</strong>
+              <span>Antall kamper spilleren har vært på banen.</span>
+            </div>
+            <div class="definition-chip" title="Min: Totalt antall spilte minutter.">
+              <strong>Min</strong>
+              <span>Totalt antall spilte minutter.</span>
+            </div>
+            <div class="definition-chip" title="Poeng: Poeng laget tok mens spilleren var på banen.">
+              <strong>Poeng</strong>
+              <span>Poeng laget tok mens spilleren var på banen.</span>
+            </div>
+            <div class="definition-chip" title="P/90: Poeng per 90 spilte minutter.">
+              <strong>P/90</strong>
+              <span>Poeng per 90 spilte minutter.</span>
+            </div>
+            <div class="definition-chip" title="MF/90: Målforskjell per 90 minutter på banen.">
+              <strong>MF/90</strong>
+              <span>Målforskjell per 90 minutter på banen.</span>
+            </div>
+            <div class="definition-chip" title="Rekke: Seier-uavgjort-tap mens spilleren var på banen.">
+              <strong>Rekke</strong>
+              <span>Seier-uavgjort-tap mens spilleren var på banen.</span>
+            </div>
           </div>
           <div class="player-controls">
             <label class="input-wrap">

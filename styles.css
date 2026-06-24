@@ -287,6 +287,41 @@ svg {
   padding: 7px 10px;
 }
 
+.definition-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: -6px 0 16px;
+}
+
+.definition-strip.is-compact {
+  grid-template-columns: 1fr;
+  margin-bottom: 14px;
+}
+
+.definition-chip {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid rgba(196, 154, 36, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 249, 232, 0.92), rgba(255, 255, 255, 0.72));
+  padding: 8px 10px;
+}
+
+.definition-chip strong {
+  color: var(--foreground);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.definition-chip span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .segmented {
   display: grid;
   gap: 7px;
@@ -714,6 +749,12 @@ svg {
   stroke-width: 1.5;
 }
 
+.chart-logo-bg {
+  fill: #fff7df;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
 .chart-wrap text {
   fill: var(--muted);
   font-size: 13px;
@@ -1027,6 +1068,450 @@ svg {
   background: linear-gradient(90deg, var(--gold), #f3d27b);
 }
 
+.gps-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.gps-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: baseline;
+  margin-top: -8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.gps-note strong {
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.gps-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gps-summary-grid article {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fffaf0, var(--surface));
+  padding: 12px;
+}
+
+.gps-summary-grid span,
+.gps-head {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.gps-summary-grid strong {
+  color: var(--foreground);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.gps-summary-grid small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.gps-filter-row,
+.gps-match-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.gps-filter-row label,
+.gps-match-selector label {
+  display: grid;
+  gap: 6px;
+  min-width: 190px;
+}
+
+.gps-filter-row span,
+.gps-match-selector span {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.gps-filter-row select,
+.gps-filter-row input,
+.gps-match-selector select,
+.gps-match-selector input {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 10px;
+}
+
+.gps-filter-row select:focus-visible,
+.gps-filter-row input:focus-visible,
+.gps-match-selector select:focus-visible,
+.gps-match-selector input:focus-visible {
+  border-color: var(--gold);
+  outline: none;
+}
+
+.gps-progress-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.gps-progress-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.gps-progress-title strong {
+  color: var(--foreground);
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.gps-progress-title span {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.gps-progress-list {
+  display: grid;
+  gap: 8px;
+}
+
+.gps-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gps-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.gps-chart-legend span::before {
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  content: "";
+}
+
+.gps-chart-legend .is-total::before {
+  background: #16120a;
+}
+
+.gps-chart-legend .is-hsr::before {
+  background: var(--gold);
+}
+
+.gps-chart-legend .is-sprint::before {
+  background: var(--green);
+}
+
+.gps-progress-chart-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 10px;
+}
+
+.gps-progress-chart {
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  height: auto;
+}
+
+.gps-axis {
+  stroke: rgba(22, 18, 10, 0.5);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-grid-line {
+  stroke: rgba(22, 18, 10, 0.08);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-axis-label,
+.gps-x-label,
+.gps-axis-title {
+  fill: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.gps-axis-label.is-right {
+  fill: var(--gold);
+}
+
+.gps-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-line.is-total,
+.gps-dot.is-total {
+  stroke: #16120a;
+}
+
+.gps-line.is-hsr,
+.gps-dot.is-hsr {
+  stroke: var(--gold);
+}
+
+.gps-line.is-sprint,
+.gps-dot.is-sprint {
+  stroke: var(--green);
+}
+
+.gps-dot {
+  fill: var(--surface);
+  stroke-width: 2.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-logo-bg {
+  fill: #fff;
+  stroke: var(--line);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-missing-dot {
+  fill: rgba(22, 18, 10, 0.24);
+  stroke: #fff;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-range-line {
+  stroke: #16120a;
+  stroke-linecap: round;
+  stroke-width: 5;
+  opacity: 0.22;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-range-dot {
+  fill: var(--surface);
+  stroke: #16120a;
+  stroke-width: 2.4;
+  cursor: help;
+  vector-effect: non-scaling-stroke;
+}
+
+.gps-range-dot.is-high {
+  fill: #fff8e6;
+}
+
+.gps-range-dot.is-low {
+  fill: #fff;
+}
+
+.gps-range.is-hsr .gps-range-line,
+.gps-range.is-hsr .gps-range-dot {
+  stroke: var(--gold);
+}
+
+.gps-range.is-sprint .gps-range-line,
+.gps-range.is-sprint .gps-range-dot {
+  stroke: var(--green);
+}
+
+.gps-range-label {
+  fill: var(--foreground);
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-width: 4;
+  paint-order: stroke fill;
+  font-size: 11px;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+.gps-range.is-hsr .gps-range-label {
+  fill: #8a6812;
+}
+
+.gps-range.is-sprint .gps-range-label {
+  fill: var(--green);
+}
+
+.gps-progress-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.55fr) minmax(260px, 1fr);
+  gap: 14px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 11px 12px;
+}
+
+.gps-progress-match {
+  display: grid;
+  gap: 3px;
+}
+
+.gps-progress-match strong {
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.gps-progress-match span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.gps-progress-bars {
+  display: grid;
+  gap: 6px;
+}
+
+.gps-progress-bars div {
+  display: grid;
+  grid-template-columns: 54px minmax(90px, 1fr) 64px;
+  gap: 8px;
+  align-items: center;
+}
+
+.gps-progress-bars span,
+.gps-progress-bars strong {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.gps-progress-bars i {
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--panel-soft);
+}
+
+.gps-progress-bars b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #16120a, var(--gold));
+}
+
+.gps-empty {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 14px;
+}
+
+.gps-table {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.gps-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) 58px 86px 70px 78px 78px 58px 62px 82px 72px;
+  gap: 12px;
+  align-items: center;
+  min-width: 950px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 11px 14px;
+}
+
+.gps-row:last-child {
+  border-bottom: 0;
+}
+
+.gps-row span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.gps-row strong {
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.gps-head {
+  background: var(--panel-soft);
+}
+
+.gps-sort-button {
+  width: max-content;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 0;
+  text-align: left;
+}
+
+.gps-sort-button::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  content: "";
+  opacity: 0.28;
+  transform: translateY(-1px);
+}
+
+.gps-sort-button.is-active {
+  color: var(--gold);
+}
+
+.gps-sort-button.is-active::after {
+  opacity: 1;
+}
+
+.gps-sort-button.is-asc::after {
+  transform: translateY(-2px) rotate(180deg);
+}
+
 .heat-cells {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
@@ -1247,11 +1732,494 @@ svg {
   white-space: nowrap;
 }
 
+.individual-module {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.34fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.individual-search {
+  margin-bottom: 14px;
+}
+
+.individual-player-list {
+  display: grid;
+  gap: 8px;
+  max-height: 650px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.individual-player-button {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--foreground);
+  padding: 8px;
+  text-align: left;
+}
+
+.compare-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.compare-dot.is-active {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+.individual-player-button:hover,
+.individual-player-button:focus-visible,
+.individual-player-button.is-active {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 1px rgba(196, 154, 36, 0.3);
+  outline: none;
+}
+
+.individual-player-button.is-active {
+  background: linear-gradient(180deg, #fff7df, #f8edcc);
+}
+
+.individual-player-button span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.individual-player-button strong,
+.individual-hero h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.individual-player-button small,
+.individual-hero span,
+.individual-stat small,
+.profile-bar-row small,
+.individual-match-row span,
+.individual-match-empty {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.player-portrait {
+  display: grid;
+  place-items: end center;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(196, 154, 36, 0.16), transparent),
+    var(--panel-soft);
+}
+
+.player-portrait.is-large {
+  width: 96px;
+  height: 96px;
+}
+
+.player-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+.player-portrait b {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.individual-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.individual-hero p {
+  margin: 0;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.individual-hero h2 {
+  margin: 3px 0 4px;
+  color: var(--foreground);
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.individual-hero-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(72px, 1fr));
+  gap: 8px;
+}
+
+.individual-hero-side {
+  display: grid;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.compare-toggle {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.compare-toggle.is-active {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+.individual-hero-kpis div,
+.individual-stat {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 10px;
+}
+
+.individual-hero-kpis span,
+.individual-stat span,
+.comparison-headline span,
+.event-profile-row span,
+.profile-bar-row span {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.individual-hero-kpis strong {
+  color: var(--foreground);
+  font-size: 21px;
+  line-height: 1;
+}
+
+.individual-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  margin-bottom: 14px;
+}
+
+.individual-tabs button {
+  min-height: 40px;
+  min-width: 0;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.individual-tabs button:last-child {
+  border-right: 0;
+}
+
+.individual-tabs button.is-active {
+  background: var(--gold);
+  color: var(--foreground);
+}
+
+.individual-content {
+  display: grid;
+  gap: 14px;
+}
+
+.individual-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.individual-stat strong {
+  color: var(--foreground);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.individual-analysis-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.05fr) minmax(280px, 0.95fr);
+  gap: 14px;
+}
+
+.comparison-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.comparison-headline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.comparison-headline div {
+  display: grid;
+  gap: 3px;
+}
+
+.comparison-headline strong {
+  color: var(--foreground);
+  font-size: 18px;
+}
+
+.comparison-headline small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.comparison-table {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.comparison-row {
+  display: grid;
+  align-items: center;
+  gap: 8px;
+  min-width: 520px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 9px 10px;
+}
+
+.comparison-row:last-child {
+  border-bottom: 0;
+}
+
+.comparison-header-row {
+  background: var(--panel-soft);
+}
+
+.comparison-row > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.comparison-row > strong {
+  color: var(--foreground);
+  font-size: 13px;
+}
+
+.comparison-row > strong.is-best {
+  color: var(--green);
+}
+
+.comparison-player-head {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.comparison-player-head .player-portrait {
+  width: 42px;
+  height: 42px;
+}
+
+.comparison-player-head strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sportscode-profile-card {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 12px;
+}
+
+.event-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.event-profile-row {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 10px;
+}
+
+.event-profile-row div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.event-profile-row strong {
+  color: var(--foreground);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.event-profile-row i {
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--panel-soft);
+}
+
+.event-profile-row b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gold);
+}
+
+.event-profile-row small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.profile-bars {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.profile-bar-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.75fr) minmax(0, 1fr) 46px;
+  gap: 10px;
+  align-items: center;
+}
+
+.profile-bar-row div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.profile-bar-row strong {
+  color: var(--foreground);
+  font-size: 14px;
+}
+
+.profile-bar-row i {
+  position: relative;
+  display: block;
+  height: 11px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--panel-soft);
+}
+
+.profile-bar-row b,
+.profile-bar-row em {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+}
+
+.profile-bar-row b {
+  background: rgba(196, 154, 36, 0.34);
+}
+
+.profile-bar-row em {
+  background: var(--green);
+}
+
+.individual-match-table {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.individual-match-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) 54px 58px 58px 70px 62px 72px 72px 72px 72px;
+  min-width: 940px;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 10px 12px;
+}
+
+.individual-match-row:last-child {
+  border-bottom: 0;
+}
+
+.individual-match-head {
+  background: var(--panel-soft);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.individual-match-row strong {
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.individual-match-empty {
+  min-width: 940px;
+  padding: 14px;
+}
+
 @media (max-width: 1180px) {
   .topbar,
   .trend-grid,
   .match-grid,
-  .player-grid {
+  .player-grid,
+  .individual-module {
     grid-template-columns: 1fr;
   }
 
@@ -1285,8 +2253,32 @@ svg {
   .zone-scoreline,
   .zone-facts,
   .timing-summary,
+  .individual-hero,
+  .individual-analysis-grid,
+  .event-profile-grid,
+  .individual-stat-grid,
   .kpi-grid {
     grid-template-columns: 1fr;
+  }
+
+  .individual-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gps-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gps-progress-row {
+    grid-template-columns: 1fr;
+  }
+
+  .gps-progress-bars div {
+    grid-template-columns: 48px minmax(80px, 1fr) 58px;
+  }
+
+  .individual-hero-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .zone-pitch {
