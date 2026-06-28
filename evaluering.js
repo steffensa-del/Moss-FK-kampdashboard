@@ -860,6 +860,22 @@
         gpsRowsByPlayer.get(row.player).push({ ...row, matchNo: match.matchNo });
       });
     });
+    const snapshotTone = (trend) => {
+      if (trend.noData) return "neutral";
+      const tolerance = Math.max(Math.abs(trend.seasonAverage || 0) * 0.02, 0.05);
+      const badLatestLevel =
+        trend.direction === "low" ? trend.latest - trend.seasonAverage : trend.seasonAverage - trend.latest;
+      const badRecentLevel =
+        trend.direction === "low" ? trend.recentAverage - trend.seasonAverage : trend.seasonAverage - trend.recentAverage;
+      const latestIsBad = badLatestLevel > tolerance;
+      const recentIsBad = badRecentLevel > tolerance;
+      const latestIsGood = badLatestLevel < -tolerance;
+      const recentIsGood = badRecentLevel < -tolerance;
+
+      if (latestIsBad || recentIsBad) return "negative";
+      if (latestIsGood && recentIsGood) return "positive";
+      return "neutral";
+    };
     const buildTrendFromValues = (definition, values, source) => {
       const clean = values.filter((value) => value !== null && Number.isFinite(value));
       if (!clean.length) {
@@ -877,7 +893,7 @@
         };
       }
       const stats = linearTrendStats(values, definition.direction);
-      return {
+      const trend = {
         ...definition,
         source,
         suffix: definition.suffix || "",
@@ -886,9 +902,9 @@
         recentAverage: stats.recentAverage,
         latest: stats.latest,
         score: stats.score,
-        tone: stats.score > 0.05 ? "negative" : stats.score < -0.05 ? "positive" : "neutral",
         noData: false,
       };
+      return { ...trend, tone: snapshotTone(trend) };
     };
     return data.individualPlayers
       .map((player) => {
@@ -907,7 +923,7 @@
             ...playerDefinitions.map((definition) => {
               const values = matches.map((match) => metricValue(definition, [match]));
               const stats = linearTrendStats(values, definition.direction);
-              return {
+              const trend = {
                 ...definition,
                 source: definition.source || "Wyscout",
                 suffix: definition.suffix || "",
@@ -916,9 +932,9 @@
                 recentAverage: metricValue(definition, recentRows) ?? 0,
                 latest: metricValue(definition, [matches[matches.length - 1]]),
                 score: stats.score,
-                tone: stats.score > 0.05 ? "negative" : stats.score < -0.05 ? "positive" : "neutral",
                 noData: false,
               };
+              return { ...trend, tone: snapshotTone(trend) };
             }),
             ...individualSnapshotGpsDefinitions.map((definition) => {
               const rows = (gpsRowsByPlayer.get(player.player) || []).sort((a, b) => a.matchNo - b.matchNo);
