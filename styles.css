@@ -206,6 +206,25 @@ svg {
   grid-template-columns: 1fr;
 }
 
+.analysis-link {
+  display: grid;
+  min-height: 42px;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  background: var(--gold);
+  color: #15130d;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.analysis-link:hover,
+.analysis-link:focus-visible {
+  background: #d6aa2a;
+  outline: 0;
+}
+
 .player-controls {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-bottom: 16px;

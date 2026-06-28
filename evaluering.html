@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moss FK | Vår evaluering</title>
+    <meta
+      name="description"
+      content="Vår evaluering av negative lag- og individtrender basert på kampdata, Sportscode, Wyscout og GPS/HPS."
+    />
+    <link rel="stylesheet" href="./evaluering.css" />
+  </head>
+  <body>
+    <main class="password-gate" id="passwordGate">
+      <form class="password-card" id="passwordForm">
+        <img src="./moss-fk.png" alt="Moss FK" class="password-logo" />
+        <div>
+          <span>Moss FK</span>
+          <h1>Vår evaluering</h1>
+          <p>Skriv inn passord for tilgang.</p>
+        </div>
+        <label>
+          <span>Passord</span>
+          <input id="dashboardPassword" type="password" autocomplete="current-password" autofocus />
+        </label>
+        <p class="password-error" id="passwordError" hidden>Feil passord.</p>
+        <button type="submit">Åpne evaluering</button>
+      </form>
+    </main>
+
+    <main class="app-shell" id="evaluationShell" hidden>
+      <header class="topbar">
+        <div class="brand">
+          <img src="./moss-fk.png" alt="Moss FK" />
+          <div>
+            <p>Moss FK</p>
+            <h1>Vår evaluering</h1>
+            <span>
+              15 negative trender på lagsnivå og 15 negative trender på individnivå,
+              basert på oppdatert grunnlag etter Strømmen-kampen.
+            </span>
+          </div>
+        </div>
+
+        <nav class="page-actions" aria-label="Sidenavigasjon">
+          <a href="./index.html">Kampdashboard</a>
+          <button type="button" data-jump-target="teamTrends">Lag</button>
+          <button type="button" data-jump-target="specialTrends">Siste 2</button>
+          <button type="button" data-jump-target="chanceTrends">Sjanser mot</button>
+          <button type="button" data-jump-target="individualSnapshot">8 per spiller</button>
+          <button type="button" data-jump-target="individualTrends">Individ</button>
+        </nav>
+      </header>
+
+      <section class="kpi-grid" id="summaryKpis" aria-label="Sammendrag"></section>
+
+      <section class="method-band" aria-label="Metode og datagrunnlag">
+        <div>
+          <p>Metode</p>
+          <h2>Trend = kamp-for-kamp med tyngde på siste 6</h2>
+        </div>
+        <div class="method-points">
+          <span>Lineær trend fra kamp til kamp</span>
+          <span>Siste 6 kamper vektes tyngst</span>
+          <span>Kort viser sesong, siste 6 og siste kamp</span>
+          <span>Minimum: 6 kamper og 300 minutter</span>
+        </div>
+      </section>
+
+      <section class="panel special-panel" id="specialTrends">
+        <div class="section-title">
+          <div>
+            <p>Spesialkort</p>
+            <h2>Siste 2 opp mot siste 7</h2>
+          </div>
+          <span id="specialTrendCount"></span>
+        </div>
+        <div class="special-grid">
+          <article class="special-lead" id="specialLead"></article>
+          <div class="special-metric-grid" id="specialMetrics"></div>
+        </div>
+        <div class="special-match-grid" id="specialMatches"></div>
+      </section>
+
+      <section class="overview-grid">
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Lag</p>
+              <h2>Største røde tråder</h2>
+            </div>
+            <span id="teamOverviewCount"></span>
+          </div>
+          <div class="compact-list" id="teamOverview"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-title">
+            <div>
+              <p>Individ</p>
+              <h2>Største individuelle fall</h2>
+            </div>
+            <span id="individualOverviewCount"></span>
+          </div>
+          <div class="compact-list" id="individualOverview"></div>
+        </article>
+      </section>
+
+      <section class="panel chance-panel" id="chanceTrends">
+        <div class="section-title">
+          <div>
+            <p>Sjanser mot oss</p>
+            <h2>Hvordan kommer de?</h2>
+          </div>
+          <span id="chanceTrendCount"></span>
+        </div>
+        <div class="chance-lead" id="chanceLead"></div>
+        <div class="chance-kpi-grid" id="chanceKpis"></div>
+        <div class="chance-grid">
+          <article class="chance-card">
+            <h3>Hva går igjen</h3>
+            <div class="pattern-list" id="chancePatterns"></div>
+          </article>
+          <article class="chance-card">
+            <h3>Faser og soner</h3>
+            <div class="phase-list" id="chancePhases"></div>
+          </article>
+        </div>
+        <div class="chance-card high-risk-card">
+          <h3>Kampene der mønsteret er tydeligst</h3>
+          <div class="risk-match-grid" id="chanceMatches"></div>
+        </div>
+      </section>
+
+      <section class="panel trend-panel" id="teamTrends">
+        <div class="section-title">
+          <div>
+            <p>Lagsnivå</p>
+            <h2>15 negative trender</h2>
+          </div>
+          <span id="teamTrendCount"></span>
+        </div>
+        <div class="trend-list" id="teamTrendList"></div>
+      </section>
+
+      <section class="panel individual-snapshot-panel" id="individualSnapshot">
+        <div class="section-title">
+          <div>
+            <p>Individkort</p>
+            <h2>8 parametere per spiller</h2>
+          </div>
+          <span id="individualSnapshotCount"></span>
+        </div>
+        <div class="individual-snapshot-grid" id="individualPlayerSnapshot"></div>
+      </section>
+
+      <section class="panel trend-panel" id="individualTrends">
+        <div class="section-title">
+          <div>
+            <p>Individnivå</p>
+            <h2>15 negative trender</h2>
+          </div>
+          <span id="individualTrendCount"></span>
+        </div>
+        <div class="trend-list individual-list" id="individualTrendList"></div>
+      </section>
+
+      <section class="note-band" aria-label="Datamerknader">
+        <strong>Datamerknad</strong>
+        <span>
+          Individkortet bruker faste Wyscout-parametere, scEvents som mål på involveringer/tagginger,
+          og GPS/HPS for total, HSR og sprint. GPS-rader vises som manglende der spilleren ikke har dekning i grunnlaget.
+        </span>
+      </section>
+    </main>
+
+    <script src="./data.js"></script>
+    <script src="./evaluering.js"></script>
+  </body>
+</html>
