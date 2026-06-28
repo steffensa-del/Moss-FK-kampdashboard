@@ -15863,8 +15863,8 @@ window.dashboardData = {
     "available": true,
     "fileName": "Logg Gps Moss.xlsx",
     "relativeSource": "GPS/Logg Gps Moss.xlsx",
-    "matchSheets": 12,
-    "matchedSheets": 12
+    "matchSheets": 13,
+    "matchedSheets": 13
   },
   "gpsMatches": [
     {
@@ -16703,7 +16703,7 @@ window.dashboardData = {
           "maxSpeed": 27.48
         },
         {
-          "player": "C.Emmanuel",
+          "player": "Junior Chidi",
           "date": "26/04/2026",
           "totalDistance": 3352.91,
           "sprintDistance": 64.69,
@@ -18465,6 +18465,237 @@ window.dashboardData = {
           "hmldPerMinute": 16.19,
           "distancePerMinute": 105.3,
           "maxSpeed": 25.54
+        }
+      ]
+    },
+    {
+      "matchNo": 13,
+      "date": "27/06/2026",
+      "opponent": "Strømmen",
+      "venue": "Borte",
+      "sheet": "Kamp 27 06 Strømmen",
+      "playerCount": 14,
+      "entries": 14,
+      "totalDistance": 106087.04,
+      "avgDistance": 7577.65,
+      "sprintDistance": 1349.09,
+      "sprintDistanceQuality": "ok",
+      "highSpeedRunning": 6750.44,
+      "hmldPerMinute": 18.91,
+      "distancePerMinute": 100.01,
+      "accelerations": 593,
+      "decelerations": 656,
+      "maxSpeed": 33.27,
+      "sprints": 75,
+      "dynamicStressLoad": 2956.51,
+      "topDistance": {
+        "player": "Aga",
+        "value": 11319.86
+      },
+      "topSpeed": {
+        "player": "Schjøth",
+        "value": 33.27
+      },
+      "topSprintDistance": {
+        "player": "Schjøth",
+        "value": 408.41
+      },
+      "players": [
+        {
+          "player": "Aga",
+          "date": "27/06/2026",
+          "totalDistance": 11319.86,
+          "sprintDistance": 103.7,
+          "highSpeedRunning": 572.64,
+          "accelerations": 62.0,
+          "decelerations": 66.0,
+          "sprints": 6.0,
+          "dynamicStressLoad": 401.5,
+          "hmldPerMinute": 19.15,
+          "distancePerMinute": 111.53,
+          "maxSpeed": 30.0
+        },
+        {
+          "player": "Musbaudeen",
+          "date": "27/06/2026",
+          "totalDistance": 10849.76,
+          "sprintDistance": 43.88,
+          "highSpeedRunning": 568.46,
+          "accelerations": 70.0,
+          "decelerations": 70.0,
+          "sprints": 4.0,
+          "dynamicStressLoad": 333.83,
+          "hmldPerMinute": 18.61,
+          "distancePerMinute": 106.9,
+          "maxSpeed": 29.77
+        },
+        {
+          "player": "Olofsson",
+          "date": "27/06/2026",
+          "totalDistance": 10492.54,
+          "sprintDistance": 84.26,
+          "highSpeedRunning": 566.64,
+          "accelerations": 56.0,
+          "decelerations": 61.0,
+          "sprints": 6.0,
+          "dynamicStressLoad": 179.8,
+          "hmldPerMinute": 17.76,
+          "distancePerMinute": 103.71,
+          "maxSpeed": 32.08
+        },
+        {
+          "player": "Marcus",
+          "date": "27/06/2026",
+          "totalDistance": 10233.6,
+          "sprintDistance": 59.51,
+          "highSpeedRunning": 761.1,
+          "accelerations": 47.0,
+          "decelerations": 65.0,
+          "sprints": 4.0,
+          "dynamicStressLoad": 385.75,
+          "hmldPerMinute": 30.83,
+          "distancePerMinute": 124.25,
+          "maxSpeed": 27.93
+        },
+        {
+          "player": "Schjøth",
+          "date": "27/06/2026",
+          "totalDistance": 10128.28,
+          "sprintDistance": 408.41,
+          "highSpeedRunning": 1015.68,
+          "accelerations": 52.0,
+          "decelerations": 77.0,
+          "sprints": 20.0,
+          "dynamicStressLoad": 132.6,
+          "hmldPerMinute": 21.13,
+          "distancePerMinute": 100.45,
+          "maxSpeed": 33.27
+        },
+        {
+          "player": "Lægreid",
+          "date": "27/06/2026",
+          "totalDistance": 9878.04,
+          "sprintDistance": 225.17,
+          "highSpeedRunning": 809.68,
+          "accelerations": 51.0,
+          "decelerations": 64.0,
+          "sprints": 11.0,
+          "dynamicStressLoad": 404.34,
+          "hmldPerMinute": 17.47,
+          "distancePerMinute": 97.33,
+          "maxSpeed": 32.3
+        },
+        {
+          "player": "Grönli",
+          "date": "27/06/2026",
+          "totalDistance": 9466.8,
+          "sprintDistance": 106.39,
+          "highSpeedRunning": 700.99,
+          "accelerations": 49.0,
+          "decelerations": 43.0,
+          "sprints": 5.0,
+          "dynamicStressLoad": 434.7,
+          "hmldPerMinute": 23.86,
+          "distancePerMinute": 113.54,
+          "maxSpeed": 29.38
+        },
+        {
+          "player": "Strande",
+          "date": "27/06/2026",
+          "totalDistance": 9408.32,
+          "sprintDistance": 22.07,
+          "highSpeedRunning": 401.09,
+          "accelerations": 51.0,
+          "decelerations": 43.0,
+          "sprints": 2.0,
+          "dynamicStressLoad": 182.23,
+          "hmldPerMinute": 12.87,
+          "distancePerMinute": 92.7,
+          "maxSpeed": 27.76
+        },
+        {
+          "player": "Lassen Harrison",
+          "date": "27/06/2026",
+          "totalDistance": 7166.59,
+          "sprintDistance": 99.7,
+          "highSpeedRunning": 461.85,
+          "accelerations": 41.0,
+          "decelerations": 46.0,
+          "sprints": 7.0,
+          "dynamicStressLoad": 140.76,
+          "hmldPerMinute": 18.42,
+          "distancePerMinute": 104.59,
+          "maxSpeed": 27.83
+        },
+        {
+          "player": "Race",
+          "date": "27/06/2026",
+          "totalDistance": 5513.25,
+          "sprintDistance": 84.22,
+          "highSpeedRunning": 279.63,
+          "accelerations": 31.0,
+          "decelerations": 44.0,
+          "sprints": 3.0,
+          "dynamicStressLoad": 79.93,
+          "hmldPerMinute": 8.77,
+          "distancePerMinute": 55.34,
+          "maxSpeed": 30.53
+        },
+        {
+          "player": "Junior Chidi",
+          "date": "27/06/2026",
+          "totalDistance": 3845.94,
+          "sprintDistance": 34.38,
+          "highSpeedRunning": 151.96,
+          "accelerations": 32.0,
+          "decelerations": 22.0,
+          "sprints": 2.0,
+          "dynamicStressLoad": 111.43,
+          "hmldPerMinute": 16.1,
+          "distancePerMinute": 93.8,
+          "maxSpeed": 29.28
+        },
+        {
+          "player": "Cassidy",
+          "date": "27/06/2026",
+          "totalDistance": 3469.72,
+          "sprintDistance": 26.09,
+          "highSpeedRunning": 190.98,
+          "accelerations": 22.0,
+          "decelerations": 26.0,
+          "sprints": 2.0,
+          "dynamicStressLoad": 65.63,
+          "hmldPerMinute": 13.93,
+          "distancePerMinute": 70.65,
+          "maxSpeed": 27.8
+        },
+        {
+          "player": "Vold Krohg",
+          "date": "27/06/2026",
+          "totalDistance": 2352.28,
+          "sprintDistance": 41.18,
+          "highSpeedRunning": 148.94,
+          "accelerations": 16.0,
+          "decelerations": 21.0,
+          "sprints": 2.0,
+          "dynamicStressLoad": 77.43,
+          "hmldPerMinute": 29.2,
+          "distancePerMinute": 123.85,
+          "maxSpeed": 29.92
+        },
+        {
+          "player": "Andersen",
+          "date": "27/06/2026",
+          "totalDistance": 1962.06,
+          "sprintDistance": 10.13,
+          "highSpeedRunning": 120.8,
+          "accelerations": 13.0,
+          "decelerations": 8.0,
+          "sprints": 1.0,
+          "dynamicStressLoad": 26.58,
+          "hmldPerMinute": 16.6,
+          "distancePerMinute": 101.43,
+          "maxSpeed": 26.91
         }
       ]
     }
