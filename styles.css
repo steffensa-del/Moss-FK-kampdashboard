@@ -1576,8 +1576,8 @@ svg {
 }
 
 .player-row {
-  grid-template-columns: minmax(180px, 1fr) 70px 70px 70px 76px 82px 90px;
-  min-width: 800px;
+  grid-template-columns: minmax(180px, 1fr) 70px 70px 82px;
+  min-width: 500px;
   gap: 12px;
   padding: 11px 14px;
 }

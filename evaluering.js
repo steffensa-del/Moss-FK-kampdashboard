@@ -187,15 +187,6 @@
       note: "Skuddregnskapet går fra pluss til minus. Kampbildet blir mer åpent mot oss.",
     },
     {
-      title: "Poeng per kamp",
-      category: "Resultat",
-      source: "Tabell",
-      direction: "high",
-      digits: 2,
-      values: () => data.matches.map((match) => match.points),
-      note: "Poengfangsten peker nedover i kamp-for-kamp-linjen, med svakere uttelling i siste 6.",
-    },
-    {
       title: "PPDA",
       category: "Press",
       source: "Wyscout",
@@ -436,14 +427,6 @@
 
     const metricDefinitions = [
       {
-        key: "points",
-        title: "Poeng per kamp",
-        direction: "high",
-        digits: 2,
-        values: data.matches.map((match) => match.points),
-        note: "Resultatuttellingen i de to siste.",
-      },
-      {
         key: "xgf",
         title: "xG for",
         direction: "high",
@@ -569,7 +552,6 @@
       return {
         label,
         result: match.score,
-        points: match.points,
         drivers: drivers.join(" · "),
       };
     });
@@ -932,7 +914,7 @@
                 ...stats,
                 seasonAverage: metricValue(definition, matches) ?? 0,
                 recentAverage: metricValue(definition, recentRows) ?? 0,
-                latest: metricValue(definition, [matches[matches.length - 1]]) ?? 0,
+                latest: metricValue(definition, [matches[matches.length - 1]]),
                 score: stats.score,
                 tone: stats.score > 0.05 ? "negative" : stats.score < -0.05 ? "positive" : "neutral",
                 noData: false,
@@ -968,7 +950,8 @@
   }
 
   const formatValue = (trend, value) => `${number(value, trend.digits ?? 1)}${trend.suffix || ""}`;
-  const formatSnapshotValue = (trend, value) => (trend.noData ? "Mangler" : formatValue(trend, value));
+  const formatSnapshotValue = (trend, value) =>
+    trend.noData || value === null || !Number.isFinite(value) ? "Mangler" : formatValue(trend, value);
   const formatSnapshotSlope = (trend) => (trend.noData ? "Ingen data" : formatSlope(trend));
   const signedNumber = (value, digits = 1) => {
     const sign = value > 0 ? "+" : value < 0 ? "-" : "";
@@ -1093,7 +1076,7 @@
         (match) => `
           <article class="special-match">
             <strong>${escapeHtml(match.label)}</strong>
-            <span>${escapeHtml(match.result)} · ${integer(match.points)} poeng</span>
+            <span>${escapeHtml(match.result)}</span>
             <em>${escapeHtml(match.drivers)}</em>
           </article>
         `,

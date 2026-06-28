@@ -8,9 +8,8 @@
     playerSearch: "",
     minutes: 180,
     appearances: 0,
-    playerPoints: 0,
     goalDiff: "Alle",
-    playerSort: "pointsPer90",
+    playerSort: "minutes",
     selectedZoneCells: ["goal-zone"],
     individualSearch: "",
     selectedIndividualPlayer: "",
@@ -175,7 +174,11 @@
     return values.reduce((sum, value) => sum + value, 0) / values.length;
   };
 
-  const pct = (successful, total) => (total ? (successful / total) * 100 : 0);
+  const pct = (successful, total) => (total ? (successful / total) * 100 : null);
+  const pctText = (successful, total, digits = 0) => {
+    const value = pct(successful, total);
+    return value === null ? "-" : `${number(value, digits)}%`;
+  };
   const per90 = (value, minutes) => (minutes ? (value / minutes) * 90 : 0);
   const formatKm = (value, digits = 1) => `${number(value / 1000, digits)} km`;
 
@@ -392,10 +395,6 @@
       .replaceAll("å", "a");
 
   const playerSortScore = (player) => {
-    if (state.playerSort === "recordOnPitch") {
-      return player.wins * 100 + player.draws * 10 - player.losses;
-    }
-
     return Number(player[state.playerSort]);
   };
 
@@ -1318,7 +1317,6 @@
           searchMatch &&
           player.minutes >= state.minutes &&
           player.appearances >= state.appearances &&
-          player.points >= state.playerPoints &&
           goalDiffMatch
         );
       })
@@ -1330,10 +1328,7 @@
         <span>Spiller</span>
         <button type="button" class="sort-header ${state.playerSort === "appearances" ? "is-active" : ""}" data-player-sort="appearances">Kamper</button>
         <button type="button" class="sort-header ${state.playerSort === "minutes" ? "is-active" : ""}" data-player-sort="minutes">Min</button>
-        <button type="button" class="sort-header ${state.playerSort === "points" ? "is-active" : ""}" data-player-sort="points">Poeng</button>
-        <button type="button" class="sort-header ${state.playerSort === "pointsPer90" ? "is-active" : ""}" data-player-sort="pointsPer90">P/90</button>
         <button type="button" class="sort-header ${state.playerSort === "goalDiffPer90" ? "is-active" : ""}" data-player-sort="goalDiffPer90">MF/90</button>
-        <button type="button" class="sort-header ${state.playerSort === "recordOnPitch" ? "is-active" : ""}" data-player-sort="recordOnPitch">Rekke</button>
       </div>
       ${
         players.length
@@ -1347,10 +1342,7 @@
                     </div>
                     <span>${player.appearances}</span>
                     <span>${player.minutes}</span>
-                    <span>${player.points}</span>
-                    <span>${number(player.pointsPer90, 2)}</span>
                     <span class="${player.goalDiffPer90 >= 0 ? "positive" : "negative"}">${number(player.goalDiffPer90, 2)}</span>
-                    <span>${escapeHtml(player.recordOnPitch)}</span>
                   </div>
                 `,
               )
@@ -1374,19 +1366,19 @@
     if (player.isGoalkeeper) {
       const keeperGroups = {
         oversikt: [
-          { label: "Redninger", value: integer(player.gkSaves), detail: `${number(player.gkSaveRate, 0)}% redningsprosent` },
+          { label: "Redninger", value: integer(player.gkSaves), detail: `${pctText(player.gkSaves, player.gkShotsAgainst)} redningsprosent` },
           { label: "Skudd imot", value: integer(player.gkShotsAgainst), detail: `${number(player.per90.gkShotsAgainst, 2)} per 90` },
           { label: "Mål imot", value: integer(player.gkConcededGoals), detail: `${number(player.per90.gkConcededGoals, 2)} per 90` },
           { label: "Keeperhandlinger", value: integer(player.scKeeperActions), detail: `${number(player.per90.scKeeperActions, 2)} per 90` },
         ],
         angrep: [
           { label: "Distribusjoner", value: integer(player.scDistributions), detail: `${number(player.per90.scDistributions, 2)} per 90` },
-          { label: "Keeperpasninger", value: integer(player.gkPasses), detail: `${number(player.gkPassAccuracy, 0)}% treff` },
-          { label: "Utover egen tredjedel", value: integer(player.gkPassesBeyondThird), detail: `${number(player.gkPassesBeyondThirdAccuracy, 0)}% treff` },
+          { label: "Keeperpasninger", value: integer(player.gkPasses), detail: `${pctText(player.gkPassesAccurate, player.gkPasses)} treff` },
+          { label: "Utover egen tredjedel", value: integer(player.gkPassesBeyondThird), detail: `${pctText(player.gkPassesBeyondThirdAccurate, player.gkPassesBeyondThird)} treff` },
           { label: "Tilbakepasninger", value: integer(player.gkBackPassesReceived), detail: "mottatt fra laget" },
         ],
         pasning: [
-          { label: "Keeperpasninger", value: integer(player.gkPasses), detail: `${number(player.gkPassAccuracy, 0)}% treff` },
+          { label: "Keeperpasninger", value: integer(player.gkPasses), detail: `${pctText(player.gkPassesAccurate, player.gkPasses)} treff` },
           { label: "Utover egen tredjedel", value: integer(player.gkPassesBeyondThird), detail: `${number(player.per90.gkPassesBeyondThird, 2)} per 90` },
           { label: "SC pasninger", value: integer(player.scPasses), detail: `${number(player.per90.scPasses, 2)} per 90` },
           { label: "SC lange", value: integer(player.scLongPasses), detail: `${number(player.per90.scLongPasses, 2)} per 90` },
@@ -1395,7 +1387,7 @@
           { label: "Redninger", value: integer(player.gkSaves), detail: `${number(player.per90.gkSaves, 2)} per 90` },
           { label: "Refleksredninger", value: integer(player.gkReflexSaves), detail: `${number(player.per90.gkReflexSaves, 2)} per 90` },
           { label: "Exits", value: integer(player.gkExits), detail: `${number(player.per90.gkExits, 2)} per 90` },
-          { label: "Luftdueller", value: integer(player.gkAerialDuels), detail: `${number(player.gkAerialWinRate, 0)}% vunnet` },
+          { label: "Luftdueller", value: integer(player.gkAerialDuels), detail: `${pctText(player.gkAerialDuelsWon, player.gkAerialDuels)} vunnet` },
         ],
         kamp: [
           { label: "Kamper", value: `${player.matches.length}`, detail: `${player.appearances} registrerte opptredener` },
@@ -1421,12 +1413,12 @@
       ],
       angrep: [
         { label: "xG", value: number(player.xg, 2), detail: `${number(player.per90.xg, 2)} per 90` },
-        { label: "Skudd", value: integer(player.shots), detail: `${number(player.shotAccuracy, 0)}% på mål` },
+        { label: "Skudd", value: integer(player.shots), detail: `${pctText(player.shotsOnTarget, player.shots)} på mål` },
         { label: "SC sjanser", value: integer(player.scOpportunities), detail: `${number(player.per90.scOpportunities, 2)} per 90` },
         { label: "SC angrep", value: integer(player.scAttackingActions), detail: `${number(player.per90.scAttackingActions, 2)} per 90` },
       ],
       pasning: [
-        { label: "Pasninger", value: integer(player.passes), detail: `${number(player.passAccuracy, 0)}% treff` },
+        { label: "Pasninger", value: integer(player.passes), detail: `${pctText(player.passesAccurate, player.passes)} treff` },
         { label: "SC pasninger", value: integer(player.scPasses), detail: `${number(player.per90.scPasses, 2)} per 90` },
         { label: "SC lange", value: integer(player.scLongPasses), detail: `${number(player.per90.scLongPasses, 2)} per 90` },
         { label: "Distribusjoner", value: integer(player.scDistributions), detail: `${number(player.per90.scDistributions, 2)} per 90` },
@@ -1479,7 +1471,7 @@
         { label: "SC angrep /90", value: (player) => player.per90.scAttackingActions, format: (player) => number(player.per90.scAttackingActions, 2) },
       ],
       pasning: [
-        { label: "Pasningstreff", value: (player) => player.passAccuracy, format: (player) => `${number(player.passAccuracy, 0)}%` },
+        { label: "Pasningstreff", value: (player) => player.passAccuracy, format: (player) => pctText(player.passesAccurate, player.passes) },
         { label: "Progressive /90", value: (player) => player.per90.progressivePasses, format: (player) => number(player.per90.progressivePasses, 2) },
         { label: "SC pasninger /90", value: (player) => player.per90.scPasses, format: (player) => number(player.per90.scPasses, 2) },
         { label: "SC lange /90", value: (player) => player.per90.scLongPasses, format: (player) => number(player.per90.scLongPasses, 2) },
@@ -1610,7 +1602,7 @@
                   <b style="width:${(item.value / max) * 100}%"></b>
                   <em style="width:${(item.made / max) * 100}%"></em>
                 </i>
-                <small>${number(pct(item.made, item.value), 0)}%</small>
+                <small>${pctText(item.made, item.value)}</small>
               </div>
             `,
           )
@@ -1624,23 +1616,23 @@
       const keeperGroups = {
         oversikt: [
           { label: "Keeperhandlinger", value: player.scKeeperActions, detail: `${number(player.per90.scKeeperActions, 2)} /90` },
-          { label: "Redninger", value: player.gkSaves, detail: `${number(player.gkSaveRate, 0)}% redningsprosent` },
+          { label: "Redninger", value: player.gkSaves, detail: `${pctText(player.gkSaves, player.gkShotsAgainst)} redningsprosent` },
           { label: "Skudd imot", value: player.gkShotsAgainst, detail: `${number(player.per90.gkShotsAgainst, 2)} /90` },
           { label: "Mål imot", value: player.gkConcededGoals, detail: `${number(player.per90.gkConcededGoals, 2)} /90` },
           { label: "Exits", value: player.gkExits, detail: `${number(player.per90.gkExits, 2)} /90` },
           { label: "Distribusjoner", value: player.scDistributions, detail: `${number(player.per90.scDistributions, 2)} /90` },
         ],
         angrep: [
-          { label: "Keeperpasninger", value: player.gkPasses, detail: `${number(player.gkPassAccuracy, 0)}% treff` },
-          { label: "Utover egen tredjedel", value: player.gkPassesBeyondThird, detail: `${number(player.gkPassesBeyondThirdAccuracy, 0)}% treff` },
+          { label: "Keeperpasninger", value: player.gkPasses, detail: `${pctText(player.gkPassesAccurate, player.gkPasses)} treff` },
+          { label: "Utover egen tredjedel", value: player.gkPassesBeyondThird, detail: `${pctText(player.gkPassesBeyondThirdAccurate, player.gkPassesBeyondThird)} treff` },
           { label: "Tilbakepasninger", value: player.gkBackPassesReceived, detail: "mottatt fra laget" },
           { label: "Distribusjoner", value: player.scDistributions, detail: `${number(player.per90.scDistributions, 2)} /90` },
           { label: "SC pasninger", value: player.scPasses, detail: `${number(player.per90.scPasses, 2)} /90` },
           { label: "SC lange", value: player.scLongPasses, detail: `${number(player.per90.scLongPasses, 2)} /90` },
         ],
         pasning: [
-          { label: "Keeperpasninger", value: player.gkPasses, detail: `${number(player.gkPassAccuracy, 0)}% treff` },
-          { label: "Utover egen tredjedel", value: player.gkPassesBeyondThird, detail: `${number(player.gkPassesBeyondThirdAccuracy, 0)}% treff` },
+          { label: "Keeperpasninger", value: player.gkPasses, detail: `${pctText(player.gkPassesAccurate, player.gkPasses)} treff` },
+          { label: "Utover egen tredjedel", value: player.gkPassesBeyondThird, detail: `${pctText(player.gkPassesBeyondThirdAccurate, player.gkPassesBeyondThird)} treff` },
           { label: "Tilbakepasninger", value: player.gkBackPassesReceived, detail: "mottatt fra laget" },
           { label: "SC pasninger", value: player.scPasses, detail: `${number(player.per90.scPasses, 2)} /90` },
           { label: "SC lange", value: player.scLongPasses, detail: `${number(player.per90.scLongPasses, 2)} /90` },
@@ -1651,7 +1643,7 @@
           { label: "Refleksredninger", value: player.gkReflexSaves, detail: `${number(player.per90.gkReflexSaves, 2)} /90` },
           { label: "Exits", value: player.gkExits, detail: `${number(player.per90.gkExits, 2)} /90` },
           { label: "Mål imot", value: player.gkConcededGoals, detail: `${number(player.per90.gkConcededGoals, 2)} /90` },
-          { label: "Luftdueller", value: player.gkAerialDuels, detail: `${number(player.gkAerialWinRate, 0)}% vunnet` },
+          { label: "Luftdueller", value: player.gkAerialDuels, detail: `${pctText(player.gkAerialDuelsWon, player.gkAerialDuels)} vunnet` },
           { label: "SC keeper", value: player.scKeeperActions, detail: `${number(player.per90.scKeeperActions, 2)} /90` },
         ],
         kamp: [
@@ -1762,7 +1754,7 @@
                         <strong>#${match.matchNo} ${escapeHtml(match.opponent)}</strong>
                         <span>${match.minutes}</span>
                         <span>${match.gkPasses}</span>
-                        <span>${number(pct(match.gkPassesAccurate, match.gkPasses), 0)}%</span>
+                        <span>${pctText(match.gkPassesAccurate, match.gkPasses)}</span>
                         <span>${match.gkShotsAgainst}</span>
                         <span>${match.gkConcededGoals}</span>
                         <span>${match.gkSaves}</span>
@@ -2007,7 +1999,7 @@
 
           if (key === "minutes") {
             state.minutes = Number(button.dataset.value);
-          } else if (["appearances", "playerPoints"].includes(key)) {
+          } else if (key === "appearances") {
             state[key] = Number(button.dataset.value);
           } else {
             state[key] = button.dataset.value;
