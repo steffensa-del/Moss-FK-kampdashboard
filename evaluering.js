@@ -367,12 +367,10 @@
     if (definition.type === "rate") return rate(rows, definition.numerator, definition.denominator);
     return null;
   };
-  const latestRawMeta = (definition, match) => {
+  const latestMatchMeta = (definition, match) => {
     if (definition.type !== "per90" || !match) return {};
-    const rawValue = Number(match[definition.field]);
     const minutes = Number(match.minutes);
     return {
-      latestRaw: Number.isFinite(rawValue) ? rawValue : null,
       latestMinutes: Number.isFinite(minutes) ? minutes : null,
     };
   };
@@ -828,7 +826,7 @@
           seasonAverage,
           recentAverage,
           latest,
-          ...latestRawMeta(definition, latestMatch),
+          ...latestMatchMeta(definition, latestMatch),
           score: stats.score,
           positiveScore: -stats.score,
           values,
@@ -993,7 +991,7 @@
                 seasonAverage: metricValue(definition, matches) ?? 0,
                 recentAverage: metricValue(definition, recentRows) ?? 0,
                 latest: metricValue(definition, [latestMatch]),
-                ...latestRawMeta(definition, latestMatch),
+                ...latestMatchMeta(definition, latestMatch),
                 score: stats.score,
                 noData: false,
               };
@@ -1033,10 +1031,9 @@
     trend.noData || value === null || !Number.isFinite(value) ? "Mangler" : formatValue(trend, value);
   const formatLatestValue = (trend) => {
     if (trend.noData || trend.latest === null || !Number.isFinite(trend.latest)) return "Mangler";
-    if (trend.type === "per90" && Number.isFinite(trend.latestRaw)) {
-      const rawDigits = trend.field === "xg" || trend.field === "xa" ? trend.digits ?? 1 : 0;
+    if (trend.type === "per90") {
       const minutes = Number.isFinite(trend.latestMinutes) ? ` (${integer(trend.latestMinutes)} min)` : "";
-      return `${number(trend.latestRaw, rawDigits)}${minutes}`;
+      return `${formatValue(trend, trend.latest)} per 90${minutes}`;
     }
     return formatValue(trend, trend.latest);
   };
