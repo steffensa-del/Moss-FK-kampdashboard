@@ -367,6 +367,15 @@
     if (definition.type === "rate") return rate(rows, definition.numerator, definition.denominator);
     return null;
   };
+  const latestRawMeta = (definition, match) => {
+    if (definition.type !== "per90" || !match) return {};
+    const rawValue = Number(match[definition.field]);
+    const minutes = Number(match.minutes);
+    return {
+      latestRaw: Number.isFinite(rawValue) ? rawValue : null,
+      latestMinutes: Number.isFinite(minutes) ? minutes : null,
+    };
+  };
 
   const hasEnoughData = (definition, rows) => {
     if (definition.type === "per90") return sum(rows, definition.field) >= (definition.minTotal || 0);
@@ -793,7 +802,8 @@
 
         const seasonAverage = metricValue(definition, matches);
         const recentAverage = metricValue(definition, recentRows);
-        const latest = metricValue(definition, [matches[matches.length - 1]]);
+        const latestMatch = matches[matches.length - 1];
+        const latest = metricValue(definition, [latestMatch]);
         if (
           seasonAverage === null ||
           recentAverage === null ||
@@ -818,6 +828,7 @@
           seasonAverage,
           recentAverage,
           latest,
+          ...latestRawMeta(definition, latestMatch),
           score: stats.score,
           positiveScore: -stats.score,
           values,
@@ -973,6 +984,7 @@
             ...playerDefinitions.map((definition) => {
               const values = matches.map((match) => metricValue(definition, [match]));
               const stats = linearTrendStats(values, definition.direction);
+              const latestMatch = matches[matches.length - 1];
               const trend = {
                 ...definition,
                 source: definition.source || "Wyscout",
@@ -980,7 +992,8 @@
                 ...stats,
                 seasonAverage: metricValue(definition, matches) ?? 0,
                 recentAverage: metricValue(definition, recentRows) ?? 0,
-                latest: metricValue(definition, [matches[matches.length - 1]]),
+                latest: metricValue(definition, [latestMatch]),
+                ...latestRawMeta(definition, latestMatch),
                 score: stats.score,
                 noData: false,
               };
@@ -1018,6 +1031,15 @@
   const formatValue = (trend, value) => `${number(value, trend.digits ?? 1)}${trend.suffix || ""}`;
   const formatSnapshotValue = (trend, value) =>
     trend.noData || value === null || !Number.isFinite(value) ? "Mangler" : formatValue(trend, value);
+  const formatLatestValue = (trend) => {
+    if (trend.noData || trend.latest === null || !Number.isFinite(trend.latest)) return "Mangler";
+    if (trend.type === "per90" && Number.isFinite(trend.latestRaw)) {
+      const rawDigits = trend.field === "xg" || trend.field === "xa" ? trend.digits ?? 1 : 0;
+      const minutes = Number.isFinite(trend.latestMinutes) ? ` (${integer(trend.latestMinutes)} min)` : "";
+      return `${number(trend.latestRaw, rawDigits)}${minutes}`;
+    }
+    return formatValue(trend, trend.latest);
+  };
   const formatSnapshotSlope = (trend) => (trend.noData ? "Ingen data" : formatSlope(trend));
   const signedNumber = (value, digits = 1) => {
     const sign = value > 0 ? "+" : value < 0 ? "-" : "";
@@ -1327,10 +1349,7 @@
                       <div class="snapshot-main">
                         <strong>${escapeHtml(trend.title)}</strong>
                         <span>${escapeHtml(trend.category)} · ${escapeHtml(trend.source)}</span>
-                        <em>Sesong ${formatSnapshotValue(trend, trend.seasonAverage)} · siste kamp ${formatSnapshotValue(
-                          trend,
-                          trend.latest,
-                        )}</em>
+                        <em>Sesong ${formatSnapshotValue(trend, trend.seasonAverage)} · siste kamp ${formatLatestValue(trend)}</em>
                       </div>
                       <div class="snapshot-value">
                         <strong>${formatSnapshotValue(trend, trend.recentAverage)}</strong>
@@ -1386,7 +1405,7 @@
                 </div>
                 <div class="metric-box">
                   <span>Siste kamp</span>
-                  <strong>${formatValue(trend, trend.latest)}</strong>
+                  <strong>${formatLatestValue(trend)}</strong>
                 </div>
               </div>
               <div class="sparkline" aria-hidden="true">${buildSparkline(trend.values, trend.direction)}</div>
