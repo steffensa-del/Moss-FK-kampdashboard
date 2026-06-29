@@ -584,11 +584,14 @@
       longBall: keyValues("D Lang ball"),
       deadBall: keyValues("D Dødball"),
       transition: keyValues("Overgang mot"),
+      established: keyValues("Etablert"),
       dtb: keyValues("DTB"),
       ballLoss: keyValues("Balltap"),
     };
 
     const meanRecent = (values) => average(recentSlice(values)) || 0;
+    const valueSum = (values) => values.reduce((total, value) => total + (Number(value) || 0), 0);
+    const shareOf = (value, total) => (total ? (value / total) * 100 : 0);
     const period = (values) => ({
       seasonAverage: average(values) || 0,
       recentAverage: meanRecent(values),
@@ -596,6 +599,26 @@
       fullSlope: slope(values),
       recentSlope: slope(recentSlice(values)),
     });
+    const phaseShareDefinitions = [
+      { key: "deadBall", label: "Dødball", values: chanceMetrics.deadBall },
+      { key: "transition", label: "Overgang", values: chanceMetrics.transition },
+      { key: "established", label: "Medium/etablert", values: chanceMetrics.established },
+      { key: "longBall", label: "Lang ball", values: chanceMetrics.longBall },
+    ];
+    const seasonPhaseTotal = phaseShareDefinitions.reduce((total, item) => total + valueSum(item.values), 0);
+    const recentPhaseTotal = phaseShareDefinitions.reduce((total, item) => total + valueSum(recentSlice(item.values)), 0);
+    const phaseShares = phaseShareDefinitions.map((item) => {
+      const seasonTotal = valueSum(item.values);
+      const recentTotal = valueSum(recentSlice(item.values));
+      return {
+        ...item,
+        seasonTotal,
+        recentTotal,
+        seasonShare: shareOf(seasonTotal, seasonPhaseTotal),
+        recentShare: shareOf(recentTotal, recentPhaseTotal),
+      };
+    });
+    const phaseShareByKey = Object.fromEntries(phaseShares.map((item) => [item.key, item]));
 
     const phaseRows = [
       {
@@ -627,6 +650,12 @@
         source: "Fase",
         values: chanceMetrics.dtb,
         note: "Høye topper i kampene med mye trykk og mange skudd imot.",
+      },
+      {
+        title: "Medium/etablert angrep",
+        source: "Fase",
+        values: chanceMetrics.established,
+        note: "Ofte veien inn før siste pasning, cutback eller innlegg fra assist-/cross-sone.",
       },
       {
         title: "Overgang mot",
@@ -684,25 +713,46 @@
         assist: period(chanceMetrics.assist),
         cross: period(chanceMetrics.cross),
         longBall: period(chanceMetrics.longBall),
+        deadBall: period(chanceMetrics.deadBall),
         transition: period(chanceMetrics.transition),
+        established: period(chanceMetrics.established),
+        dtb: period(chanceMetrics.dtb),
       },
+      phaseShares,
       patterns: [
         {
           title: "Mønster 1: assistsoner før avslutning",
           text: `Assist zone mot ligger på ${number(period(chanceMetrics.assist).recentAverage, 1)} i siste 6 mot ${number(
             period(chanceMetrics.assist).seasonAverage,
             1,
-          )} i sesongsnitt. Det er den tydeligste gjentakende inngangen til sjanser imot.`,
+          )} i sesongsnitt. Veien inn dit kommer ofte via etablert/medium angrep, DTB eller lang ball før siste pasning/cross.`,
         },
         {
-          title: "Mønster 2: bredde og innlegg",
+          title: "Mønster 2: veien inn i sonene",
+          text: `Medium/etablert angrep er ${number(period(chanceMetrics.established).recentAverage, 1)} per kamp i siste 6, DTB er ${number(
+            period(chanceMetrics.dtb).recentAverage,
+            1,
+          )}, og D Lang ball er ${number(period(chanceMetrics.longBall).recentAverage, 1)}. Dette peker på at motstander ofte får flyttet oss før siste handling kommer.`,
+        },
+        {
+          title: "Mønster 3: bredde og innlegg",
           text: `Cross zone mot er ${number(period(chanceMetrics.cross).recentAverage, 1)} i siste 6 mot ${number(
             period(chanceMetrics.cross).seasonAverage,
             1,
           )} i sesongsnitt. Motstander får fortsatt levere for ofte fra sidene.`,
         },
         {
-          title: "Mønster 3: lange baller og andreballer",
+          title: "Mønster 4: fasefordeling siste 6",
+          text: `Av valgt fasevolum i siste 6 står dødball for ${number(phaseShareByKey.deadBall.recentShare, 0)} %, overgang ${number(
+            phaseShareByKey.transition.recentShare,
+            0,
+          )} %, medium/etablert angrep ${number(phaseShareByKey.established.recentShare, 0)} % og lang ball ${number(
+            phaseShareByKey.longBall.recentShare,
+            0,
+          )} %. Det gir mer presis retning på hvor inngangene starter.`,
+        },
+        {
+          title: "Mønster 5: lange baller og andreballer",
           text: `D Lang ball er ${number(period(chanceMetrics.longBall).recentAverage, 1)} i siste 6 og ${number(
             period(chanceMetrics.longBall).latest,
             0,
@@ -714,7 +764,7 @@
         },
         {
           title: "Dødball er høyt volum, men ikke hovedforklaringen",
-          text: `Dødball mot er stabilt høyt, men sammenhengen med xG mot er svakere enn assist-/cross-soner.`,
+          text: `Dødball mot er ${number(period(chanceMetrics.deadBall).recentAverage, 1)} per kamp i siste 6, men sammenhengen med xG mot er svakere enn assist-/cross-soner.`,
         },
       ],
       phaseRows,
@@ -1145,13 +1195,15 @@
 
   const renderChanceAnalysis = (analysis) => {
     const metrics = analysis.metrics;
-    element("chanceTrendCount").textContent = "fase og sone";
+    const phaseShareByKey = Object.fromEntries(analysis.phaseShares.map((item) => [item.key, item]));
+    element("chanceTrendCount").textContent = "fase, sone og prosent";
     element("chanceLead").innerHTML = `
-      <strong>Sjansene mot oss kommer oftest gjennom tilgang til assistsoner og innleggssoner før selve avslutningen.</strong>
+      <strong>Sjansene mot oss kommer oftest etter at motstander får flyttet angrepet inn i assistsoner og innleggssoner.</strong>
       <span>
         I siste 6 ligger xG mot på ${number(metrics.xga.recentAverage, 2)} mot ${number(metrics.xga.seasonAverage, 2)}
         i sesongsnitt, mens skudd mot ligger på ${number(metrics.shots.recentAverage, 1)} mot ${number(metrics.shots.seasonAverage, 1)}.
-        Det som går igjen er ikke én enkelt fase, men at motstander får etablert siste handling fra side-/assistsoner for ofte.
+        Veien inn til sonene går oftest via medium/etablert angrep, lange baller/andreballer og enkelte overganger før siste pasning,
+        cutback eller innlegg kommer fra side-/assistsonen.
       </span>
     `;
 
@@ -1160,6 +1212,26 @@
       { label: "Skudd mot", value: `${number(metrics.shots.recentAverage, 1)}`, detail: `siste 6 · sesong ${number(metrics.shots.seasonAverage, 1)}` },
       { label: "Assist zone mot", value: `${number(metrics.assist.recentAverage, 1)}`, detail: `siste 6 · sesong ${number(metrics.assist.seasonAverage, 1)}` },
       { label: "Cross zone mot", value: `${number(metrics.cross.recentAverage, 1)}`, detail: `siste 6 · sesong ${number(metrics.cross.seasonAverage, 1)}` },
+      {
+        label: "Dødball",
+        value: `${number(phaseShareByKey.deadBall.recentShare, 0)}%`,
+        detail: `av valgt fasevolum · sesong ${number(phaseShareByKey.deadBall.seasonShare, 0)}%`,
+      },
+      {
+        label: "Overgang",
+        value: `${number(phaseShareByKey.transition.recentShare, 0)}%`,
+        detail: `av valgt fasevolum · sesong ${number(phaseShareByKey.transition.seasonShare, 0)}%`,
+      },
+      {
+        label: "Medium/etablert",
+        value: `${number(phaseShareByKey.established.recentShare, 0)}%`,
+        detail: `av valgt fasevolum · sesong ${number(phaseShareByKey.established.seasonShare, 0)}%`,
+      },
+      {
+        label: "Lang ball",
+        value: `${number(phaseShareByKey.longBall.recentShare, 0)}%`,
+        detail: `av valgt fasevolum · sesong ${number(phaseShareByKey.longBall.seasonShare, 0)}%`,
+      },
     ]
       .map(
         (item) => `
